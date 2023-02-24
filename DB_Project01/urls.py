@@ -57,3 +57,4 @@ urlpatterns = [
     path('chart/pie/', views.chart_pie),
     path('chart/map/', views.chart_map),
 ]
+
