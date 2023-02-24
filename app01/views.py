@@ -29,7 +29,7 @@ def client_list(request):
     if search:
         data_dict["clientname__contains"] = search
 
-    queryset = models.Client.objects.filter(**data_dict)
+    queryset = models.Client.objects.filter(**data_dict).order_by('-clientname')
 
     # 每页只显示一行号码
     paginator = Paginator(queryset, 5)
@@ -184,12 +184,12 @@ def employee_list(request):
     search = request.GET.get("search", "")
 
     if search:
-        data_dict["clientname__contains"] = search
+        data_dict["firstname__contains"] = search
 
-    queryset = models.Employee.objects.filter(**data_dict).order_by()
+    queryset = models.Employee.objects.filter(**data_dict)..order_by('-firstname')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
@@ -300,10 +300,10 @@ def outlet_list(request):
     if search:
         data_dict["outletno__contains"] = search
 
-    queryset = models.Outlet.objects.filter(**data_dict).order_by()
+    queryset = models.Outlet.objects.filter(**data_dict).order_by('-outletno')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
@@ -441,12 +441,12 @@ def rental_list(request):
     search = request.GET.get("search", "")
 
     if search:
-        data_dict["clientname__contains"] = search
+        data_dict["rentalno__contains"] = search
 
-    queryset = models.Rentalagreement.objects.filter(**data_dict).order_by()
+    queryset = models.Rentalagreement.objects.filter(**data_dict).order_by('-rentalno')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
@@ -538,12 +538,12 @@ def fault_list(request):
     search = request.GET.get("search", "")
 
     if search:
-        data_dict["clientname__contains"] = search
+        data_dict["vehlicenseno__contains"] = search
 
-    queryset = models.Faultreport.objects.filter(**data_dict).order_by()
+    queryset = models.Faultreport.objects.filter(**data_dict).order_by('-vehlicenseno')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
@@ -630,12 +630,12 @@ def vehicle_list(request):
     search = request.GET.get("search", "")
 
     if search:
-        data_dict["clientname__contains"] = search
+        data_dict["vehlicenseno__contains"] = search
 
-    queryset = models.Vehicle.objects.filter(**data_dict).order_by()
+    queryset = models.Vehicle.objects.filter(**data_dict).order_by('-vehlicenseno')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 1)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
