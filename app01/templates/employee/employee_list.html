@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+    <style>
+        .navbar {
+            background-color: lightcoral;
+        }
+
+        .client {
+            width: 1500px;
+        }
+
+        th {
+            text-align: center;
+            font-size: smaller;
+        }
+
+        td {
+            text-align: center;
+            font-size: smaller;
+        }
+
+        {#   鼠标悬停样式    #}
+        tr:hover {
+            background-color: #ffffc1;
+        }
+
+        .selecte2 {
+            background-color: lightcyan;
+        }
+
+        .panel-default > .panel-heading {
+            background-color: white;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/employee/add/">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            新建雇员
+        </a>
+          <div style="float:right;">
+              <form method="get">
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" placeholder="查雇员姓名..." name="search" value="{{ search }}">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+            雇员列表
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr class="active">
+                <th>雇员编号</th>
+                <th>职称编号</th>
+                <th style="width: 60px">职称</th>
+                <th style="width: 80px">姓名</th>
+                <th>住址</th>
+                <th>工作联系方式</th>
+                <th>家庭联系方式</th>
+                <th>邮箱</th>
+                <th>身份证号</th>
+                <th>出生日期</th>
+                <th>所在地</th>
+                <th>性别</th>
+                <th>薪资</th>
+                <th>入职时间</th>
+                <th>部门编号</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr>
+                    <th scope="row">{{ obj.employeeno }}</th>
+                    <td>{{ obj.titleno }}</td>
+                    <td>{{ obj.get_title_display}}</td>
+                    <td>{{ obj.firstname }}</td>
+                    <td>{{ obj.address }}</td>
+                    <td>{{ obj.worktelno }}</td>
+                    <td>{{ obj.hometelno }}</td>
+                    <td>{{ obj.empemailaddress }}</td>
+                    <td>{{ obj.socialscuritynumber }}</td>
+                    <td>{{ obj.dob }}</td>
+                    <td>{{ obj.position }}</td>
+                    <td>{{ obj.get_sex_display}}</td>
+                    <td>{{ obj.salary }}</td>
+                    <td>{{ obj.datestarted }}</td>
+                    <td>{{ obj.outletno.outletno }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="/employee/{{ obj.employeeno }}/edit/">编辑</a>
+                        <a class="btn btn-danger btn-xs" href="/employee/delete/?no={{ obj.employeeno }}">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {# 分页导航   #}
+    <nav aria-label="Page navigation" style="text-align: center">
+        <ul class="pagination">
+            <!-- 如果不是第一页，则显示上翻按钮 -->
+            {% if queryset.has_previous %}
+                <li><a href="?page=1"> &laquo; 首页</a></li>
+                <li>
+                    <a href="?page={{ queryset.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">{{ queryset.previous_page_number }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            <!-- 当前页 -->
+            <li class="active"><a href=""> {{ queryset.number }} <span class="sr-only"> </span></a></li>
+
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if queryset.has_next %}
+                <li><a href="?page={{ queryset.next_page_number }}"> {{ queryset.next_page_number }}</a></li>
+                <li>
+                    <a href="?page={{ queryset.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true"> 尾页&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}

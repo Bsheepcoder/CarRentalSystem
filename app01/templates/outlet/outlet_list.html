@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+    <style>
+        .navbar {
+            background-color: lightyellow;
+        }
+
+        .client {
+            width: 1500px;
+        }
+
+        th {
+            text-align: center;
+            font-size: smaller;
+        }
+
+        td {
+            text-align: center;
+            font-size: smaller;
+        }
+
+        {#   鼠标悬停样式    #}
+        tr:hover {
+            background-color: #ffffc1;
+        }
+
+        .selecte3 {
+            background-color: lightcyan;
+        }
+
+        .panel-default > .panel-heading {
+            background-color: white;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/outlet/add/">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            新建门店
+        </a>
+     <div style="float:right;">
+         <form method="get">
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" placeholder="查门店编号..." name="search" value="{{ search }}">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+            门店列表
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr class="active">
+                <th>门店编号</th>
+                <th>门店所在街道</th>
+                <th>门店所在城市</th>
+                <th>门店所在省</th>
+                <th>邮政编码</th>
+                <th>门店电话</th>
+                <th>门店传真</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr>
+                    <th scope="row">{{ obj.outletno }}</th>
+                    <td>{{ obj.outletstreet }}</td>
+                    <td>{{ obj.outletcity }}</td>
+                    <td>{{ obj.outletstate }}</td>
+                    <td>{{ obj.outletzipcode }}</td>
+                    <td>{{ obj.outlettelno }}</td>
+                    <td>{{ obj.outletfaxno }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="/outlet/{{ obj.outletno }}/manager/">查看经理</a>
+                        <a class="btn btn-primary btn-xs" href="/outlet/{{ obj.outletno }}/edit/">编辑</a>
+                        <a class="btn btn-danger btn-xs" href="/outlet/delete/?no={{ obj.outletno }}">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {# 分页导航   #}
+    <nav aria-label="Page navigation" style="text-align: center">
+        <ul class="pagination">
+            <!-- 如果不是第一页，则显示上翻按钮 -->
+            {% if queryset.has_previous %}
+                <li><a href="?page=1"> &laquo; 首页</a></li>
+                <li>
+                    <a href="?page={{ queryset.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">{{ queryset.previous_page_number }}</span>
+                    </a>
+                </li>
+            {% endif %}
+            <!-- 当前页 -->
+            <li class="active"><a href=""> {{ queryset.number }} <span class="sr-only"> </span></a></li>
+
+            <!-- 如果不是最末页，则显示下翻按钮 -->
+            {% if queryset.has_next %}
+                <li><a href="?page={{ queryset.next_page_number }}"> {{ queryset.next_page_number }}</a></li>
+                <li>
+                    <a href="?page={{ queryset.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true"> 尾页&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}
