@@ -186,7 +186,7 @@ def employee_list(request):
     if search:
         data_dict["firstname__contains"] = search
 
-    queryset = models.Employee.objects.filter(**data_dict)..order_by('-firstname')
+    queryset = models.Employee.objects.filter(**data_dict).order_by('-firstname')
 
     # 每页只显示一行号码
     paginator = Paginator(queryset, 10)
