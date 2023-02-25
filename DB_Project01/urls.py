@@ -36,7 +36,12 @@ urlpatterns = [
     path('outlet/add/', views.outlet_add),
     path('outlet/<str:no>/edit/', views.outlet_edit),
     path('outlet/delete/', views.outlet_delete),
-    path('outlet/<str:no>/manager/', views.outlet_manager),
+    # 经理信息
+    path('outlet/manager/list/', views.outlet_manager_list),
+    path('outlet/manager/add/', views.outlet_manager_add),
+    path('outlet/<str:no>/manager/edit/', views.outlet_manager_edit),
+    path('outlet/manager/delete/', views.outlet_manager_delete),
+    path('outlet/<str:no>/manager/watch/', views.outlet_manager_watch),
     # 租凭信息
     path('rental/list/', views.rental_list),
     path('rental/add/', views.rental_add),
@@ -57,4 +62,3 @@ urlpatterns = [
     path('chart/pie/', views.chart_pie),
     path('chart/map/', views.chart_map),
 ]
-

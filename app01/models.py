@@ -131,9 +131,9 @@ class Vehicle(models.Model):
 
 class Outletmanager(models.Model):
     """ 店长表 """
-    managerno = models.IntegerField(primary_key=True, verbose_name="记录编号")
-    outletno = models.ForeignKey(verbose_name="商店编号", to="Outlet", to_field="outletno", on_delete=models.CASCADE)
-    titleno = models.ForeignKey(verbose_name="职称编号", to="Employee", to_field="titleno", on_delete=models.CASCADE)
+    managerno = models.CharField(max_length=10, primary_key=True, verbose_name="记录编号")
+    outletno = models.ForeignKey(verbose_name="商店编号", to="Outlet", to_field="outletno", on_delete=models.CASCADE, blank=True, null=True)
+    titleno = models.ForeignKey(verbose_name="职称编号", to="Employee", to_field="titleno", on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=10, verbose_name="姓名")
 
     def __str__(self):

@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '*$a$a*&mhox#fv!_eoht@y#e+fyid_b+fujppqf$jm6d(sw*&n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -126,6 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATIC_ROOT = '/home/sites/dbproject.com/DB_Project01/collected_static'
+STATIC_ROOT = '/home/sites/dbproject.com/DB_Project01/collected_static'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)

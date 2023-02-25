@@ -32,7 +32,7 @@ def client_list(request):
     queryset = models.Client.objects.filter(**data_dict).order_by('-clientname')
 
     # 每页只显示一行号码
-    paginator = Paginator(queryset, 5)
+    paginator = Paginator(queryset, 10)
     # 获取url中的号码
     page = request.GET.get('page')
     # 通过组件将页码对应的内容返回给queryset
@@ -427,32 +427,106 @@ class ManagerModelForm(forms.ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs = {"class": "form-control", "placeholder": field.label}
 
-    def clean_outletno(self):
+    def clean_managerno(self):
         txt_managerno = self.cleaned_data['managerno']
-        if models.Outletmanager.objects.filter(managerno=txt_outletno).exists():
+        if models.Outletmanager.objects.filter(managerno=txt_managerno).exists():
             raise ValidationError('记录已存在')
-        return txt_outletno
+        return txt_managerno
 
 
+def outlet_manager_list(request):
+    data_dict = {}
+    search = request.GET.get("search", "")
 
-def outlet_manager(request, no):
+    if search:
+        data_dict["managerno__contains"] = search
+
+    queryset = models.Outletmanager.objects.filter(**data_dict).order_by('-managerno')
+
+    # 每页只显示一行号码
+    paginator = Paginator(queryset, 10)
+    # 获取url中的号码
+    page = request.GET.get('page')
+    # 通过组件将页码对应的内容返回给queryset
+    queryset = paginator.get_page(page)
+    #  queryset = models.Outlet.objects.all()
+    return render(request, "manager/manager_list.html", {"queryset": queryset, "search": search})
+
+
+def outlet_manager_watch(request,no):
     # 获取对象
-    row_object = models.Outlet.objects.filter(outletno=no).first()
+    row_object = models.Outletmanager.objects.filter(outletno=no).first()
+
+    print(row_object)
 
     if request.method == "GET":
         # 对象设置为form
-        form = FaultModelForm(instance=row_object)
-        return render(request, 'outlet/outlet_edit.html', {'form': form})
+        form = ManagerModelForm(instance=row_object)
+        return render(request, 'manager/manager_watch.html', {'form': form,'outletno':no})
 
     # 实例化当前行
-    form = OutletModelForm(data=request.POST, instance=row_object)
+    form = ManagerEditModelForm(data=request.POST, instance=row_object)
 
     # 数据校验
     if form.is_valid():
         form.save()
         return redirect("/outlet/list/")
     else:
-        return render(request, 'outlet/outlet_edit.html', {'form': form})
+        return render(request, 'manager/manager_watch.html', {'form': form})
+
+
+def outlet_manager_add(request):
+    if request.method == "GET":
+        form = ManagerModelForm()
+        return render(request, 'manager/manager_add.html', {'form': form})
+        # 数据校验
+    form = ManagerModelForm(data=request.POST)
+
+    if form.is_valid():
+        form.save()
+        return redirect("/outlet/manager/list/")
+    else:
+        return render(request, 'manager/manager_add.html', {'form': form})
+
+
+
+class ManagerEditModelForm(ManagerModelForm):
+
+    def clean_managerno(self):
+        txt_managerno = self.cleaned_data['managerno']
+        if models.Outletmanager.objects.exclude(managerno=self.instance.pk).filter(managerno=txt_managerno).exists():
+            raise ValidationError('门店编号已存在')
+        return txt_managerno
+
+
+def outlet_manager_edit(request, no):
+    # 获取对象
+    row_object = models.Outletmanager.objects.filter(managerno=no).first()
+
+    print(row_object)
+
+    if request.method == "GET":
+        # 对象设置为form
+        form = ManagerModelForm(instance=row_object)
+        return render(request, 'manager/manager_edit.html', {'form': form})
+
+    # 实例化当前行
+    form = ManagerEditModelForm(data=request.POST, instance=row_object)
+
+    # 数据校验
+    if form.is_valid():
+        form.save()
+        return redirect("/outlet/manager/list/")
+    else:
+        return render(request, 'manager/manager_edit.html', {'form': form})
+
+
+def outlet_manager_delete(request):
+    no = request.GET.get('no')
+
+    models.Outletmanager.objects.filter(managerno=no).delete()
+
+    return redirect('/outlet/manager/list/')
 
 
 # 租凭管理
@@ -558,9 +632,9 @@ def fault_list(request):
     search = request.GET.get("search", "")
 
     if search:
-        data_dict["vehlicenseno__contains"] = search
+        data_dict["faultreportno__contains"] = search
 
-    queryset = models.Faultreport.objects.filter(**data_dict).order_by('-vehlicenseno')
+    queryset = models.Faultreport.objects.filter(**data_dict).order_by('-faultreportno')
 
     # 每页只显示一行号码
     paginator = Paginator(queryset, 10)
