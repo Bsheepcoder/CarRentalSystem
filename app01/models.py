@@ -17,7 +17,11 @@ class Client(models.Model):
     contacttelno = models.CharField(max_length=11, verbose_name="联系人电话")
     contactfaxno = models.CharField(max_length=17, verbose_name="联系人传真", blank=True, null=True)
     clientemaliaddress = models.CharField(max_length=20, verbose_name="联系人邮箱", default="", blank=True, null=True)
+
     # '0000000001', '奇项东', '民族大道', '湖北省', '430074', '18947336207', '010-26737123-888'
+
+    def __str__(self):
+        return self.clientno
 
 
 class Employee(models.Model):
@@ -53,6 +57,9 @@ class Employee(models.Model):
     datestarted = models.DateField(verbose_name="入职时间")
     outletno = models.ForeignKey('Outlet', models.DO_NOTHING, verbose_name="门店编号", default="")
 
+    def __str__(self):
+        return self.employeeno
+
     class Meta:
         unique_together = (('employeeno', 'titleno'),)
 
@@ -66,6 +73,9 @@ class Faultreport(models.Model):
     comments = models.CharField(max_length=50, blank=True, null=True, verbose_name="评语")
     employeeno = models.ForeignKey(Employee, models.DO_NOTHING, verbose_name="雇员编号", default="")
 
+    def __str__(self):
+        return self.faultreportno
+
 
 class Outlet(models.Model):
     """ 门店表 """
@@ -76,6 +86,9 @@ class Outlet(models.Model):
     outletzipcode = models.CharField(max_length=6, verbose_name="邮政编码")
     outlettelno = models.CharField(verbose_name="商店电话", max_length=11, default="")
     outletfaxno = models.CharField(blank=True, null=True, verbose_name="商店传真", max_length=17)
+
+    def __str__(self):
+        return self.outletno
 
 
 class Rentalagreement(models.Model):
@@ -97,6 +110,9 @@ class Rentalagreement(models.Model):
     clientno = models.ForeignKey(Client, models.DO_NOTHING, verbose_name="客户编号")
     vehlicenseno = models.ForeignKey('Vehicle', models.DO_NOTHING, verbose_name="车辆编号")
 
+    def __str__(self):
+        return self.rentalno
+
 
 class Vehicle(models.Model):
     """ 车辆表 """
@@ -109,6 +125,9 @@ class Vehicle(models.Model):
     hirerate = models.SmallIntegerField(verbose_name="日租金")
     outletno = models.ForeignKey(Outlet, models.DO_NOTHING, verbose_name="门店编号")
 
+    def __str__(self):
+        return self.vehlicenseno
+
 
 class Outletmanager(models.Model):
     """ 店长表 """
@@ -116,3 +135,6 @@ class Outletmanager(models.Model):
     outletno = models.ForeignKey(verbose_name="商店编号", to="Outlet", to_field="outletno", on_delete=models.CASCADE)
     titleno = models.ForeignKey(verbose_name="职称编号", to="Employee", to_field="titleno", on_delete=models.CASCADE)
     name = models.CharField(max_length=10, verbose_name="姓名")
+
+    def __str__(self):
+        return self.managerno

@@ -415,6 +415,26 @@ def outlet_delete(request):
     return redirect('/outlet/list/')
 
 
+class ManagerModelForm(forms.ModelForm):
+    class Meta:
+        model = models.Outletmanager
+        fields = "__all__"
+
+    # 给元素添加样式
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 循环找到所有的组件，添加form-control样式
+        for name, field in self.fields.items():
+            field.widget.attrs = {"class": "form-control", "placeholder": field.label}
+
+    def clean_outletno(self):
+        txt_managerno = self.cleaned_data['managerno']
+        if models.Outletmanager.objects.filter(managerno=txt_outletno).exists():
+            raise ValidationError('记录已存在')
+        return txt_outletno
+
+
+
 def outlet_manager(request, no):
     # 获取对象
     row_object = models.Outlet.objects.filter(outletno=no).first()

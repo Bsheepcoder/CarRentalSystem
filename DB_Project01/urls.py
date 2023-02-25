@@ -31,7 +31,7 @@ urlpatterns = [
     path('employee/add/', views.employee_add),
     path('employee/<str:no>/edit/', views.employee_edit),
     path('employee/delete/', views.employee_delete),
-    # 部门信息
+    # 门店信息
     path('outlet/list/', views.outlet_list),
     path('outlet/add/', views.outlet_add),
     path('outlet/<str:no>/edit/', views.outlet_edit),
