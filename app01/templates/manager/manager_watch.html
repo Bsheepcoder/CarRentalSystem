@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block Title %}
+    查看经理
+{% endblock %}
+
+{% block css %}
+    <style>
+        .navbar {
+            background-color: lightgreen;
+        }
+
+        .selecte3 {
+            background-color: lightcyan;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+      <div style="margin-bottom: 10px">
+        <a class="btn btn-primary" href="/outlet/list/">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+            返回
+        </a>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">查看经理 |  门店编号：{{ outletno }}  </h3>
+        </div>
+        <div class="panel-body">
+            <div style="margin-left: 200px;margin-right: 250px">
+                <form method="post" class="form-horizontal" novalidate>
+                    {% csrf_token %}
+
+                    {% for obj in form %}
+                        <div class="form-group">
+                            <label for="inputTitle" class="col-sm-2 control-label">{{ obj.label }}</label>
+                            <div class="col-sm-10 ">
+                                {{ obj }}
+                                <span style="color: red">{{ obj.errors.0 }}</span>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group" style="text-align: center">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock %}
