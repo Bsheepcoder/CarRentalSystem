@@ -621,9 +621,9 @@ def rental_edit(request, no):
 def rental_delete(request):
     no = request.GET.get('no')
 
-    models.Vehicle.objects.filter(vehlicenseno=no).delete()
+    models.Rentalagreement.objects.filter(rentalno=no).delete()
 
-    return redirect('/vehicle/list/')
+    return redirect('/rental/list/')
 
 
 # 故障报告管理
@@ -647,7 +647,7 @@ def fault_list(request):
 
 
 class FaultModelForm(forms.ModelForm):
-    faultreportno = forms.CharField(min_length=10, max_length=10, label="车辆编号")
+    faultreportno = forms.CharField(min_length=10, max_length=10, label="检修编号")
 
     class Meta:
         model = models.Faultreport
@@ -713,7 +713,7 @@ def fault_edit(request, no):
 def fault_delete(request):
     no = request.GET.get('no')
 
-    models.Faultreport.objects.filter(outletno=no).delete()
+    models.Faultreport.objects.filter(faultreportno=no).delete()
 
     return redirect('/fault/list/')
 
@@ -875,14 +875,12 @@ def chart_pie(request):
 
 def chart_map(request):
     data = models.Outlet.objects.values('outletcity').distinct()
-    print(data)
     series_data = []
     for obj in data:
         item_state = obj['outletcity']
         num = models.Outlet.objects.filter(outletcity=item_state).count()
         series_data.append({"name": item_state, "value": num})
 
-    print(series_data)
     result = {
         "status": True,
         "data": {
